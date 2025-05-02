@@ -53,7 +53,20 @@ class Library:
     def add_book(self,book: Book):
         self.books[book.name] = book
     def search_book(self,**kwargs):
-        pass
+        with open("books_data.json") as file:
+            data = json.load(file)
+        for vals in data.values():
+            supplied=0
+            required=len(kwargs)
+            for i in kwargs:
+                try:
+                    if kwargs[i] == vals[i]:
+                        supplied+=1
+                except:
+                    print(f"function cannot get argument {i}")
+                    return
+            if required == supplied:
+                print(vals)
     def save_to_file(self,filename):
         data = {
             name: {
@@ -92,7 +105,7 @@ class Admin:
             stats['genre'].append(rows['genre'])
             stats['rent_count'].append(rows['rent_count'])
         return pd.DataFrame(stats).sort_values(by="rent_count")
-# library = Library()
+library = Library()
 # library.add_book(Book("harry potter","Jim Collins",2010,"fantacy"))
 # library.save_to_file("books_data.json")
 # library.load_data("books_data.json")
@@ -103,3 +116,5 @@ class Admin:
 # library.save_to_file("books_data.json")
 # admin = Admin()
 # print(admin.statistiks())
+# library.load_data("books_data.json")
+# library.search_book(author="Jim Collins", genre = "fantacy")
